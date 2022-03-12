@@ -3,6 +3,12 @@
 Data populated from these scripts is meant to be visualized at <https://timetrack.slgotting.com>
 
 
+## Compatibility
+
+Right now this script is only usable on Linux. Tested working on Ubuntu 18. Likely works on Ubuntu 20.
+
+I may add support for Windows in the future but I wanted to get it out as it is right now.
+
 ## Getting Started
 
 ### Install packages with
@@ -12,12 +18,11 @@ Data populated from these scripts is meant to be visualized at <https://timetrac
 
 ### Setup up systemd to automatically run script to track active window
 
-> :warning: | Make sure to change username to your username
-> :---: | :---
-> :warning: | Also your pip install might be at a location other than `/home/username/.local/bin/timetrack-slg`
-> :information_source: | Use `whereis timetrack-slg` to find its "binary" location
-> :information_source: | The -s switch is set to .9766 because this is the interval I found gives me close to or exactly 1 run per second. See [here](#calculate-your-run-interval) For information on how to calculate what value you should use.
-> :information_source: | Get your DISPLAY variable with `env | grep DISPLAY`
+ :warning: | Make sure to change username to your username
+ :---: | :---
+ :warning: | Also your pip install might be at a location other than `/home/username/.local/bin/timetrack-slg`. To find location, run `whereis timetrack-slg`
+ :information_source: | The -s switch is set to .9766 because this is the interval I found gives me close to or exactly 1 run per second. See [here](#calculate-your-run-interval) for information on how to calculate what value you should use.
+ :information_source: | Get your DISPLAY variable with `env | grep DISPLAY`
 
 echo '[Unit]
 Description=Simple time logger
