@@ -1,3 +1,0 @@
-[submodule "automation"]
-	path = automation
-	url = git@github.com:slgotting/pip-package-automation.git
