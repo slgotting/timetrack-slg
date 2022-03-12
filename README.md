@@ -42,9 +42,7 @@ WantedBy=multi-user.target' >> /etc/systemd/system/timetrack-slg.service
 
 ### Calculate your run interval
 
-1. Make sure timetrack-consolidate is running in crontab every 5 minutes.
-2. Run the script without any -s flag set for a while. 10 minutes to be safe. Shouldn't need to do this more than once
-3. Inspect your consolidate file and add up the times of a 5 minute block. The value should be relatively close to 300 (~ 290 - 299). Mine was 293
-4. Divide number by 300. So in my case I had 293 so ( 293 / 300 ) is .9766, hence the value you see above.
-
-> :information_source: | Your processing speed is likely different, simply run it for 5 minutes at the default `-s 1` setting and calculate your precise interval with `count / 300`
+> 1. Make sure timetrack-consolidate is running in crontab every 5 minutes.
+> 2. Run the script without any -s flag set for a while. 10 minutes to be safe. Shouldn't need to do this more than once.
+> 3. Inspect your consolidate file and add up the times of a 5 minute block. The value should be relatively close to 300 (~ 290 - 299). Mine was 293
+> 4. Divide number by 300. So in my case I had 293 so ( 293 / 300 ) is .9766, hence the value you see above.
