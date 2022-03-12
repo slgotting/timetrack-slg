@@ -4,7 +4,7 @@ import runpy
 from setuptools import setup, find_packages
 from slg_setup import get_script_files
 
-PACKAGE_NAME = "package-boilerplate"
+PACKAGE_NAME = "timetrack-slg"
 version_meta = runpy.run_path("./version.py")
 VERSION = version_meta["__version__"]
 
@@ -27,7 +27,7 @@ if __name__ == "__main__":
         install_requires=parse_requirements("requirements.txt"),
         python_requires=">=3.6.3",
         scripts=get_script_files(),
-        description="This is a description.",
+        description="Timetracking tools that provide the data for use with timetrack.slgotting.com",
         long_description=long_description,
         long_description_content_type="text/markdown",
     )

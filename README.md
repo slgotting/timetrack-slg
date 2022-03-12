@@ -1,12 +1,13 @@
-# Python Package Boilerplate
+## TimeTrack
 
-This is an minimal example of how to publish a python package.
-
-You can follow along with the [guide](https://nrempel.com/how-to-publish-a-python-package-to-pypi).
+Data populated from these scripts is meant to be visualized at timetrack.slgotting.com
 
 
-### WARNING: do not run apply_custom_naming.py from another directory. It will delete things (potentially).
-### INFO: If no script name is entered, it will delete both the scripts directory and scripts line from setup.py
-To apply a custom name to your package, run:
+## Getting Started
 
-python3 apply_custom_naming.py
+### Install packages with
+
+`pip install timetrack-slg`
+
+
+Setup up systemd to automatically run script
