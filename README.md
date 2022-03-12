@@ -12,7 +12,7 @@ Data populated from these scripts is meant to be visualized at (<https://timetra
 
 ### Setup up systemd to automatically run script to track active window
 
->> :warning: | Make sure to change username with your username
+> :warning: | Make sure to change username with your username
 > :---: | :---
 > :warning: | Also your pip install might be at a location other than `/home/username/.local/bin/timetrack-slg`
 > :---: | :---
