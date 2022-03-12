@@ -1,25 +1,26 @@
 ## TimeTrack
 
-Data populated from these scripts is meant to be visualized at <https://timetrack.slgotting.com>
+Data populated from these scripts is meant to be interacted with at <https://timetrack.slgotting.com>
 
 
 ## Compatibility
 
-Right now this script is only usable on Linux. Tested working on Ubuntu 18. It should work on any linux distro if the following commands work:
+Right now this script is only usable on Linux. Tested working on Ubuntu 18. It should work on any linux distro if the following commands are available:
 
 * xdotool
 * wmctrl
+* xprintidle
 
 I may add support for Windows in the future but I wanted to get it out as it is right now.
 
 ## Getting Started
 
-### Install packages with
+1. ### Install package with
 
 `pip install timetrack-slg`
 
 
-### Setup up systemd to automatically run script to track active window
+2. ### Set up systemd to automatically run script (heed warnings)
 
  :warning: | Make sure to change username to your username
  :---: | :---
@@ -42,6 +43,12 @@ ExecStart=/home/username/.local/bin/timetrack-slg -s .9766 -o /home/username/.co
 WantedBy=multi-user.target' >> /etc/systemd/system/timetrack-slg.service
 
 ```
+
+
+3. ### Set up cron job to automatically consolidate log (heed warnings)
+
+
+
 
 ## More Info
 
