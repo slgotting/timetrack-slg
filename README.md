@@ -28,7 +28,9 @@ I may add support for Windows in the future but I wanted to get it out as it is 
  :information_source: | The -s switch is set to .9766 because this is the interval I found gives me close to or exactly 1 run per second. See ["Calculate your sleep time"](#calculate-your-run-interval) for information on how to calculate what value you should use.
  :information_source: | Get your DISPLAY variable with `env | grep DISPLAY`
 
-Run ```echo '[Unit]
+Run
+
+```echo '[Unit]
 Description=Simple time logger
 After=multi-user.target
 
@@ -41,7 +43,6 @@ ExecStart=/home/username/.local/bin/timetrack-slg -s .9766 -o /home/username/.co
 
 [Install]
 WantedBy=multi-user.target' >> /etc/systemd/system/timetrack-slg.service
-
 ```
 
 
