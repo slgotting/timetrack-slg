@@ -5,7 +5,10 @@ Data populated from these scripts is meant to be visualized at <https://timetrac
 
 ## Compatibility
 
-Right now this script is only usable on Linux. Tested working on Ubuntu 18. Likely works on Ubuntu 20.
+Right now this script is only usable on Linux. Tested working on Ubuntu 18. It should work on any linux distro if the following commands work:
+
+* xdotool
+* wmctrl
 
 I may add support for Windows in the future but I wanted to get it out as it is right now.
 
@@ -21,10 +24,10 @@ I may add support for Windows in the future but I wanted to get it out as it is 
  :warning: | Make sure to change username to your username
  :---: | :---
  :warning: | Also your pip install might be at a location other than `/home/username/.local/bin/timetrack-slg`. To find location, run `whereis timetrack-slg`
- :information_source: | The -s switch is set to .9766 because this is the interval I found gives me close to or exactly 1 run per second. See [here](#calculate-your-run-interval) for information on how to calculate what value you should use.
+ :information_source: | The -s switch is set to .9766 because this is the interval I found gives me close to or exactly 1 run per second. See ["Calculate your sleep time"](#calculate-your-run-interval) for information on how to calculate what value you should use.
  :information_source: | Get your DISPLAY variable with `env | grep DISPLAY`
 
-echo '[Unit]
+Run ```echo '[Unit]
 Description=Simple time logger
 After=multi-user.target
 
@@ -38,11 +41,13 @@ ExecStart=/home/username/.local/bin/timetrack-slg -s .9766 -o /home/username/.co
 [Install]
 WantedBy=multi-user.target' >> /etc/systemd/system/timetrack-slg.service
 
+```
+
 ## More Info
 
-### Calculate your run interval
+### Calculate your sleep time
 
 > 1. Make sure timetrack-consolidate is running in crontab every 5 minutes.
-> 2. Run the script without any -s flag set for a while. 10 minutes to be safe. Shouldn't need to do this more than once.
+> 2. Run the script without any -s flag set for a while. 10 minutes to be safe. Shouldn't need to do this more than once so find something else to do while waiting.
 > 3. Inspect your consolidate file and add up the times of a 5 minute block. The value should be relatively close to 300 (~ 290 - 299). Mine was 293
 > 4. Divide number by 300. So in my case I had 293 so ( 293 / 300 ) is .9766, hence the value you see above.
