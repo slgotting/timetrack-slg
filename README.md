@@ -30,6 +30,7 @@ I may add support for Windows in the future but I wanted to get it out as it is 
  :information_source: | Output file `-o /home/username/timetrack-slg/timelog.json` must be a json file
 
 Before running this command make sure you change the necessary variables using the above as guidance to doing so.
+
 In your terminal, run:
 
 ```
