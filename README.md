@@ -49,7 +49,13 @@ ExecStart=/home/username/.local/bin/timetrack-slg -s .9766 -o /home/username/tim
 WantedBy=multi-user.target' | sudo tee /etc/systemd/system/timetrack-slg.service >/dev/null
 ```
 
-Then to start up the script run
+Then tell systemd to start this up at boot with
+
+`sudo systemctl enable timetrack-slg.service`
+
+And start er up with:
+
+`sudo systemctl start timetrack-slg.service`
 
 
 3. ### Set up cron job to automatically consolidate log (heed warnings)
