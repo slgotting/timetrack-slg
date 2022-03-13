@@ -20,14 +20,16 @@ I may add support for Windows in the future but I wanted to get it out as it is 
 `pip install timetrack-slg`
 
 
-2. ### Set up systemd to automatically run script (heed warnings)
+2. ### Set up systemd to automatically run script (on boot and always restart on fail)
 
  :warning: | Make sure to change username to your username
  :---: | :---
- :warning: | Also your pip install might be at a location other than `/home/username/.local/bin/timetrack-slg`. To find location, run `whereis timetrack-slg`
+ :warning: | Also your python file install might be at a location other than `/home/username/.local/bin/timetrack-slg`. To find location, run `whereis timetrack-slg`. Update ExecStart as necessary
  :information_source: | The -s switch is set to .9766 because this is the interval I found gives me close to or exactly 1 run per second. See ["Calculate your sleep time"](#calculate-your-sleep-time) for information on how to calculate what value you should use.
  :information_source: | Get your DISPLAY variable with `env \| grep DISPLAY`
+ :information_source: | Output file `-o /home/username/timetrack-slg/timelog.json` must be a json file
 
+Before running this command make sure you change the necessary variables using the above as guidance to doing so.
 In your terminal, run:
 
 ```
@@ -40,11 +42,13 @@ User=username
 Type=simple
 Restart=always
 Environment="DISPLAY=:0"
-ExecStart=/home/username/.local/bin/timetrack-slg -s .9766 -o /home/username/.config/
+ExecStart=/home/username/.local/bin/timetrack-slg -s .9766 -o /home/username/timetrack-slg/timelog.json
 
 [Install]
 WantedBy=multi-user.target' | sudo tee /etc/systemd/system/timetrack-slg.service >/dev/null
 ```
+
+Then to start up the script run
 
 
 3. ### Set up cron job to automatically consolidate log (heed warnings)
