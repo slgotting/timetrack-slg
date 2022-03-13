@@ -25,12 +25,12 @@ I may add support for Windows in the future but I wanted to get it out as it is 
  :warning: | Make sure to change username to your username
  :---: | :---
  :warning: | Also your pip install might be at a location other than `/home/username/.local/bin/timetrack-slg`. To find location, run `whereis timetrack-slg`
- :information_source: | The -s switch is set to .9766 because this is the interval I found gives me close to or exactly 1 run per second. See ["Calculate your sleep time"](#calculate-your-run-interval) for information on how to calculate what value you should use.
+ :information_source: | The -s switch is set to .9766 because this is the interval I found gives me close to or exactly 1 run per second. See ["Calculate your sleep time"](#calculate-your-sleep-time) for information on how to calculate what value you should use.
  :information_source: | Get your DISPLAY variable with `env \| grep DISPLAY`
 
 In your terminal, run:
 
-``
+```
 echo '[Unit]
 Description=Time tracker
 After=multi-user.target
@@ -43,7 +43,7 @@ Environment="DISPLAY=:0"
 ExecStart=/home/username/.local/bin/timetrack-slg -s .9766 -o /home/username/.config/
 
 [Install]
-WantedBy=multi-user.target' >> /etc/systemd/system/timetrack-slg.service
+WantedBy=multi-user.target' | sudo tee /etc/systemd/system/timetrack-slg.service >/dev/null
 ```
 
 
