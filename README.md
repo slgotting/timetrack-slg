@@ -72,13 +72,18 @@ And start er up with:
 
 3. ### Set up cron job to automatically consolidate log
 
-Add this line to your crontab:
+Add this line to your crontab (changing username and paths where necessary):
 
 `*/5 * * * * /home/username/.local/bin/timetrack-consolidate --input_filepath /home/username/timetrack-slg/time-log.json --config_filepath=/home/username/.config/slg/time-log.yml --run_interval 5`
 
 This line consolidates the time-log.json file every 5 minutes so that our timelog filesize doesnt grow too big.
 
 
+4. ### Success
+
+If you've done everything correctly, you should have a time-log-consolidated.json generated in the input_filepath location.
+Admittedly, this is a very unnecessarily complex process right now. I simply wanted to get this out and testable quickly.
+(In the future I will be creating a script to do all this for you; that will come with Windows support)
 
 
 ## More Info
