@@ -72,12 +72,12 @@ And start er up with:
 
 3. ### Set up cron job to automatically consolidate log
 
-Run:
+Add this line to your crontab:
 
-`(crontab -u $(whoami) -l; echo \'*/5 * * * * /home/$(whoami)/.local/bin/timetrack-consolidate --input_filepath /home/$(whoami)/timetrack-slg/time-log.json --config_filepath=/home/$(whoami)/.config/slg/time-log.yml --run_interval 5 \' ) | crontab -u $(whoami) -`
+`*/5 * * * * /home/username/.local/bin/timetrack-consolidate --input_filepath /home/username/timetrack-slg/time-log.json --config_filepath=/home/username/.config/slg/time-log.yml --run_interval 5`
 
+This line consolidates the time-log.json file every 5 minutes so that our timelog filesize doesnt grow too big.
 
-to automatically pipe in the necessary line to your crontab
 
 
 
