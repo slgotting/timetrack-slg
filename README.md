@@ -1,7 +1,9 @@
 ## TimeTrack
 
-Data populated from these scripts is meant to be interacted with at <https://timetrack.slgotting.com>
+Time is tracked by logging the active, focused window of the user every second.
+The consolidate script is mean to be run on a 5 minute interval on the seconds, and consolidates the raw time log.
 
+You then upload your consolidated time log to <https://timetrack.slgotting.com>, and you can inspect your time usage with a nice graphical UI
 
 ## Compatibility
 
@@ -15,10 +17,15 @@ I may add support for Windows in the future but I wanted to get it out as it is 
 
 ## Getting Started
 
-1. ### Install package with
+### Install package with
 
 `pip install timetrack-slg`
 
+
+To set everything up you can do things the easy way by running in your terminal (after you have installed with pip):
+`install-timetracker-slg`
+
+Or the hard way and follow the steps below
 
 2. ### Set up systemd to automatically run script (on boot and always restart on fail)
 
@@ -27,7 +34,8 @@ I may add support for Windows in the future but I wanted to get it out as it is 
  :warning: | Also your python file install might be at a location other than `/home/username/.local/bin/timetrack-slg`. To find location, run `whereis timetrack-slg`. Update ExecStart as necessary
  :information_source: | The -s switch is set to .9766 because this is the interval I found gives me close to or exactly 1 run per second. See ["Calculate your sleep time"](#calculate-your-sleep-time) for information on how to calculate what value you should use.
  :information_source: | Get your DISPLAY variable with `env \| grep DISPLAY`
- :information_source: | Output file `-o /home/username/timetrack-slg/timelog.json` must be a json file
+ :information_source: | Output file `-o /home/username/timetrack-slg/time-log.json` must be a json file
+ :information_source: | Run timetrack-slg -h to see all options
 
 :warning: Before running this command make sure you change the necessary variables using the above as guidance to doing so.
 
@@ -43,11 +51,27 @@ User=username
 Type=simple
 Restart=always
 Environment="DISPLAY=:0"
-ExecStart=/home/username/.local/bin/timetrack-slg -s .9766 -o /home/username/timetrack-slg/timelog.json
+ExecStart=/home/username/.local/bin/timetrack-slg \
+            --output_filepath /home/username/timetrack-slg/time-log.json \
+            --sleep_time 0.9766 \
+            --time_til_idle 30 \
+            --config_filepath /home/username/.config/slg/time-log.yml
 
 [Install]
 WantedBy=multi-user.target' | sudo tee /etc/systemd/system/timetrack-slg.service >/dev/null
 ```
+
+output_filepath', default='/var/log/slg/time-log.json',
+                        help='Where we should log the times. Must be absolute path')
+
+    parser.add_argument('-s', '--sleep_time', default=1, type=float,
+                        help='How long should sleep be between each log.')
+
+    parser.add_argument('-i', '--time_til_idle', default=30, type=int,
+                        help='How long we should wait before we consider the user idle. (in seconds)')
+
+    parser.add_argument('-c', '--config_filepath', default='/home/username/.config/slg/time-log.yml',
+                        help='Filepath of the config file we are using')
 
 Then tell systemd to start this up at boot with
 
@@ -58,8 +82,14 @@ And start er up with:
 `sudo systemctl start timetrack-slg.service`
 
 
-3. ### Set up cron job to automatically consolidate log (heed warnings)
+3. ### Set up cron job to automatically consolidate log
 
+Run:
+
+`(crontab -u $(whoami) -l; echo \'*/5 * * * * /home/$(whoami)/.local/bin/timetrack-consolidate --input_filepath /home/$(whoami)/timetrack-slg/time-log.json --config_filepath=/home/$(whoami)/.config/slg/time-log.yml --run_interval 5 \' ) | crontab -u $(whoami) -`
+
+
+to automatically pipe in the necessary line to your crontab
 
 
 

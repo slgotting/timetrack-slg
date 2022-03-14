@@ -13,16 +13,16 @@ import json
 def get_arguments():
     parser = argparse.ArgumentParser(description='', formatter_class=RawTextHelpFormatter)
 
-    parser.add_argument('-o', '--output_filepath', default='/var/log/slg/time_log.json',
+    parser.add_argument('-o', '--output_filepath', default='/var/log/slg/time-log.json',
                         help='Where we should log the times. Must be absolute path')
 
     parser.add_argument('-s', '--sleep_time', default=1, type=float,
                         help='How long should sleep be between each log.')
 
-    parser.add_argument('-i', '--time_til_idle', default=30000, type=int,
-                        help='How long we should wait before we consider the user idle. (in milliseconds)')
+    parser.add_argument('-i', '--time_til_idle', default=30, type=int,
+                        help='How long we should wait before we consider the user idle. (in seconds)')
 
-    parser.add_argument('-c', '--config_filepath', default='/home/steven/.config/slg/time_log.yml',
+    parser.add_argument('-c', '--config_filepath', default='/home/username/.config/slg/time-log.yml',
                         help='Filepath of the config file we are using')
 
     args = parser.parse_args()
@@ -156,7 +156,7 @@ if __name__ == '__main__':
             except:
                 logger.exception('issue calling "xdotool getwindowfocus getwindowname"')
 
-            output = check_if_idle(output, args.time_til_idle, idle_ignore_strings)
+            output = check_if_idle(output, args.time_til_idle * 1000, idle_ignore_strings)
 
             logger.debug(output)
             write_output(output, abs_filepath, date, time_)
