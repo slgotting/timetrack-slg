@@ -82,7 +82,9 @@ This line consolidates the time-log.json file every 5 minutes so that our timelo
 4. ### Success
 
 If you've done everything correctly, you should have a time-log-consolidated.json generated in the input_filepath location.
+
 Admittedly, this is a very unnecessarily complex process right now. I simply wanted to get this out and testable quickly.
+
 (In the future I will be creating a script to do all this for you; that will come with Windows support)
 
 
