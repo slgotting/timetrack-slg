@@ -61,18 +61,6 @@ ExecStart=/home/username/.local/bin/timetrack-slg \
 WantedBy=multi-user.target' | sudo tee /etc/systemd/system/timetrack-slg.service >/dev/null
 ```
 
-output_filepath', default='/var/log/slg/time-log.json',
-                        help='Where we should log the times. Must be absolute path')
-
-    parser.add_argument('-s', '--sleep_time', default=1, type=float,
-                        help='How long should sleep be between each log.')
-
-    parser.add_argument('-i', '--time_til_idle', default=30, type=int,
-                        help='How long we should wait before we consider the user idle. (in seconds)')
-
-    parser.add_argument('-c', '--config_filepath', default='/home/username/.config/slg/time-log.yml',
-                        help='Filepath of the config file we are using')
-
 Then tell systemd to start this up at boot with
 
 `sudo systemctl enable timetrack-slg.service`
