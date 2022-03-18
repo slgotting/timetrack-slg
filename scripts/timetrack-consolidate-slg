@@ -101,7 +101,6 @@ if __name__ == '__main__':
                 else:
                     consolidated_time_log[date_][time_][open_window] += 1
 
-
         write_json(consolidated_time_log, consolidated_abs_filepath)
 
         # clear the time_log after consolidating

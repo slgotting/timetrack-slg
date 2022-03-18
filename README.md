@@ -64,7 +64,11 @@ ExecStart=/home/username/.local/bin/timetrack-slg \
 WantedBy=multi-user.target' | sudo tee /etc/systemd/system/timetrack-slg.service >/dev/null
 ```
 
-Then tell systemd to start this up at boot with
+Restart systemctl daemon:
+
+`sudo systemctl daemon-reload`
+
+Then tell systemd to start this up at boot with:
 
 `sudo systemctl enable timetrack-slg.service`
 
@@ -84,7 +88,7 @@ This line consolidates the time-log.json file every 5 minutes so that our timelo
 
 ### 3. Success
 
-If you've done everything correctly, you should have a time-log-consolidated.json generated in the input_filepath location (at least after 5 minutes have passed).
+If you've done everything correctly, you should have a time-log-consolidated.json generated in the input_filepath location (if at least 5 minutes have passed).
 
 
 
