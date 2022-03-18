@@ -3,7 +3,7 @@
 Time is tracked by logging the active, focused window of the user every second.
 The consolidate script is mean to be run on a 5 minute interval on the seconds, and consolidates the raw time log.
 
-You then upload your consolidated time log to <https://timetrack.slgotting.com>, and you can inspect your time usage with a nice graphical UI
+You then upload your consolidated time log to <https://timetrack.slgotting.com>, and you can inspect your time usage with a graphical UI
 
 ## Compatibility
 
@@ -22,12 +22,15 @@ I may add support for Windows in the future but I wanted to get it out as it is 
 `pip install timetrack-slg`
 
 
-To set everything up you can do things the easy way by running in your terminal (after you have installed with pip):
-`install-timetracker-slg`
+## Install the easy way
 
-Or the hard way and follow the steps below
+`sudo install-timetrack-slg`
 
-2. ### Set up systemd to automatically run script (on boot and always restart on fail)
+## Install the hard way
+
+This is the hard way, make sure to look over any commands and see that they contain proper variable values
+
+1. Set up systemd to automatically run script (on boot and always restart on fail)
 
  :warning: | Make sure to change username to your username
  :---: | :---
@@ -70,29 +73,27 @@ And start er up with:
 `sudo systemctl start timetrack-slg.service`
 
 
-3. ### Set up cron job to automatically consolidate log
+2. Set up cron job to automatically consolidate log
 
 Add this line to your crontab (changing username and paths where necessary):
 
-`*/5 * * * * /home/username/.local/bin/timetrack-consolidate --input_filepath /home/username/timetrack-slg/time-log.json --config_filepath=/home/username/.config/slg/time-log.yml --run_interval 5`
+`*/5 * * * * /home/username/.local/bin/timetrack-consolidate-slg --input_filepath /home/username/timetrack-slg/time-log.json --config_filepath /home/username/.config/slg/time-log.yml --run_interval 5`
 
 This line consolidates the time-log.json file every 5 minutes so that our timelog filesize doesnt grow too big.
 
 
-4. ### Success
+3. Success
 
-If you've done everything correctly, you should have a time-log-consolidated.json generated in the input_filepath location.
+If you've done everything correctly, you should have a time-log-consolidated.json generated in the input_filepath location (at least after 5 minutes have passed).
 
-Admittedly, this is a very unnecessarily complex process right now. I simply wanted to get this out and testable quickly.
-
-(In the future I will be creating a script to do all this for you; that will come with Windows support)
 
 
 ## More Info
 
 ### Calculate your sleep time
 
-> 1. Make sure timetrack-consolidate is running in crontab every 5 minutes.
+> 1. Make sure timetrack-consolidate-slg is running in crontab every 5 minutes.
 > 2. Run the script without any -s flag set for a while. 10 minutes to be safe. Shouldn't need to do this more than once so find something else to do while waiting.
 > 3. Inspect your consolidate file and add up the times of a 5 minute block. The value should be relatively close to 300 (~ 290 - 299). Mine was 293
 > 4. Divide number by 300. So in my case I had 293 so ( 293 / 300 ) is .9766, hence the value you see above.
+> Note: Since we will simply overwrite any times that already exist, we can use a number lower than this and run the script more frequently (0.96 or even lower) to guarantee we have 300 data points every 5 minutes.
