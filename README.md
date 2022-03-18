@@ -30,7 +30,7 @@ I may add support for Windows in the future but I wanted to get it out as it is 
 
 This is the hard way, make sure to look over any commands and see that they contain proper variable values
 
-1. Set up systemd to automatically run script (on boot and always restart on fail)
+### 1. Set up systemd to automatically run script (on boot and always restart on fail)
 
  :warning: | Make sure to change username to your username
  :---: | :---
@@ -73,7 +73,7 @@ And start er up with:
 `sudo systemctl start timetrack-slg.service`
 
 
-2. Set up cron job to automatically consolidate log
+### 2. Set up cron job to automatically consolidate log
 
 Add this line to your crontab (changing username and paths where necessary):
 
@@ -82,7 +82,7 @@ Add this line to your crontab (changing username and paths where necessary):
 This line consolidates the time-log.json file every 5 minutes so that our timelog filesize doesnt grow too big.
 
 
-3. Success
+### 3. Success
 
 If you've done everything correctly, you should have a time-log-consolidated.json generated in the input_filepath location (at least after 5 minutes have passed).
 
