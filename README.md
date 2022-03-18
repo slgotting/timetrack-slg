@@ -96,4 +96,5 @@ If you've done everything correctly, you should have a time-log-consolidated.jso
 > 2. Run the script without any -s flag set for a while. 10 minutes to be safe. Shouldn't need to do this more than once so find something else to do while waiting.
 > 3. Inspect your consolidate file and add up the times of a 5 minute block. The value should be relatively close to 300 (~ 290 - 299). Mine was 293
 > 4. Divide number by 300. So in my case I had 293 so ( 293 / 300 ) is .9766, hence the value you see above.
+
 > Note: Since we will simply overwrite any times that already exist, we can use a number lower than this and run the script more frequently (0.96 or even lower) to guarantee we have 300 data points every 5 minutes.
