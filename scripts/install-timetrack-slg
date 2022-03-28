@@ -163,13 +163,14 @@ if __name__ == '__main__':
 
         display_var = subprocess.check_output(f"env | grep DISPLAY", shell=True).decode('utf-8').strip()
         path_to_script = subprocess.check_output(f"whereis timetrack-slg", shell=True).decode('utf-8').strip()
-        subprocess.run(f"sudo echo {SYSTEMD_SERVICE(username, display_var, path_to_script, time_log_filepath, config_filepath)} > /etc/systemd/system/timetrack-slg.service", shell=True)
+        subprocess.run(f"sudo echo {SYSTEMD_SERVICE(username, display_var, path_to_script, time_log_filepath, config_filepath)}", shell=True)
+        # subprocess.run(f"sudo echo {SYSTEMD_SERVICE(username, display_var, path_to_script, time_log_filepath, config_filepath)} > /etc/systemd/system/timetrack-slg.service", shell=True)
 
         subprocess.run(f"sudo systemctl daemon-reload", shell=True)
         subprocess.run(f"sudo systemctl enable timetrack-slg.service", shell=True)
         subprocess.run(f"sudo systemctl start timetrack-slg.service", shell=True)
 
-        crontab_addition = f'\n\n*/5 * * * * */5 * * * * {path_to_script} --input_filepath {time_log_filepath} --config_filepath {config_filepath} --run_interval 5'
+        crontab_addition = f'\n\n*/5 * * * * {path_to_script} --input_filepath {time_log_filepath} --config_filepath {config_filepath} --run_interval 5'
         subprocess.run(f'(crontab -u {username} -l; echo \'{crontab_addition}\' ) | crontab -u {username} -', shell=True)
 
     except:
