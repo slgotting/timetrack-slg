@@ -179,6 +179,11 @@ if __name__ == '__main__':
         confirm_output(f"sudo chown {username}:{username} {'/'.join(config_filepath.split('/')[:-1])}")
         confirm_output(f"sudo chown {username}:{username} {config_filepath}")
 
+        # create timelog directory and file / handle ownership
+        confirm_output(f"sudo mkdir -p {'/'.join(time_log_filepath.split('/')[:-1])}")
+        confirm_output(f"sudo chown {username}:{username} {'/'.join(time_log_filepath.split('/')[:-1])}")
+        confirm_output(f"sudo chown {username}:{username} {time_log_filepath}")
+
         display_var = subprocess.check_output(f"env | grep DISPLAY", shell=True).decode('utf-8').strip()
         # path_to_script = subprocess.check_output(f"whereis timetrack-slg").decode('utf-8').strip()
         path_to_script = f'/home/{username}/.local/bin/timetrack-slg'
