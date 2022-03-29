@@ -127,13 +127,14 @@ IdleIgnore:
 '''
 
 if __name__ == '__main__':
+    args = get_arguments()
+
     if not is_root():
         print(f'\nScript needs to be run as root: sudo {__file__.split("/")[-1]} <options>\n')
         print('Steps taken can be seen in the getting started section at https://github.com/slgotting/timetrack-slg\n')
         print(f'See the contents of this script by running: cat $(whereis {__file__.split("/")[-1]})\n')
         exit(0)
 
-    args = get_arguments()
     try:
         config = build_true_configuration(args)
         guarantee_requirements_met(config)
