@@ -9,7 +9,7 @@ from pprint import pformat
 
 REQUIRED_ARGUMENTS = ['username']
 DYNAMIC_DEFAULTS = { # If an argument is defaulted to a derivative of a previous required argument, we can set a lambda of said required argument
-    'config_filepath': lambda username: f'/home/{username}/.config/slg/time_log.yml',
+    'timelog_config_filepath': lambda username: f'/home/{username}/.config/slg/time_log.yml',
     'time_log_filepath': lambda username: f'/home/{username}/timetrack-slg/time-log.json'
 }
 SENSITIVE_ARGUMENTS = [] # place any passwords or other sensitive arguments in here to not expose them in configuration printing
@@ -21,6 +21,7 @@ SPECIAL_REQUIREMENTS = { # variable must return a truthy value for these lambda 
     #     },
     # ]
 }
+
 
 def get_arguments():
     parser = argparse.ArgumentParser(description='', formatter_class=RawTextHelpFormatter)
@@ -106,11 +107,7 @@ User={username}
 Type=simple
 Restart=always
 Environment="{display_var}"
-ExecStart={path_to_script} \
-            --output_filepath {time_log_filepath} \
-            --sleep_time 0.96 \
-            --time_til_idle 30 \
-            --config_filepath {config_filepath}
+ExecStart={path_to_script} --output_filepath {time_log_filepath} --sleep_time 0.96 --time_til_idle 30 --config_filepath {config_filepath}
 
 [Install]
 WantedBy=multi-user.target
@@ -142,7 +139,7 @@ if __name__ == '__main__':
         guarantee_requirements_met(config)
 
         username = config.get('username')
-        config_filepath = config.get('config_filepath')
+        config_filepath = config.get('timelog_config_filepath')
         time_log_filepath = config.get('time_log_filepath')
 
         # create log directory / handle ownership
@@ -157,14 +154,15 @@ if __name__ == '__main__':
         logger.info(f'\nUsing configuration:\n\n{pformat(sensitive_stripped_config)}')
 
         # create config directory and file / handle ownership
-        subprocess.run(f"sudo -p mkdir {config_filepath.split('/')[:-1]} && sudo echo {DEFAULT_CONFIG} > {config_filepath}", shell=True)
-        subprocess.run(f"sudo chown {username}:{username} {config_filepath.split('/')[:-1]}", shell=True)
+        subprocess.run(f"sudo -p mkdir {'/'.join(config_filepath.split('/')[:-1])} && sudo echo \"{DEFAULT_CONFIG}\" > {config_filepath}", shell=True)
+        subprocess.run(f"sudo chown {username}:{username} {'/'.join(config_filepath.split('/')[:-1])}", shell=True)
         subprocess.run(f"sudo chown {username}:{username} {config_filepath}", shell=True)
+        print(f"sudo mkdir -p {'/'.join(config_filepath.split('/')[:-1])} && sudo echo \"{DEFAULT_CONFIG}\" > {config_filepath}")
 
         display_var = subprocess.check_output(f"env | grep DISPLAY", shell=True).decode('utf-8').strip()
-        path_to_script = subprocess.check_output(f"whereis timetrack-slg", shell=True).decode('utf-8').strip()
-        # subprocess.run(f"sudo echo {SYSTEMD_SERVICE(username, display_var, path_to_script, time_log_filepath, config_filepath)}", shell=True)
-        subprocess.run(f"sudo echo {SYSTEMD_SERVICE(username, display_var, path_to_script, time_log_filepath, config_filepath)} > /etc/systemd/system/timetrack-slg.service", shell=True)
+        # path_to_script = subprocess.check_output(f"whereis timetrack-slg", shell=True).decode('utf-8').strip()
+        path_to_script = f'/home/{username}/.local/bin/timetrack-slg'
+        subprocess.run(f"sudo echo \"{SYSTEMD_SERVICE(username, display_var, path_to_script, time_log_filepath, config_filepath)}\" > /etc/systemd/system/timetrack-slg.service", shell=True)
 
         subprocess.run(f"sudo systemctl daemon-reload", shell=True)
         subprocess.run(f"sudo systemctl enable timetrack-slg.service", shell=True)
