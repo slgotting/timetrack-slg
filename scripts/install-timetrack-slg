@@ -167,7 +167,8 @@ if __name__ == '__main__':
         subprocess.run(f"sudo systemctl enable timetrack-slg.service", shell=True)
         subprocess.run(f"sudo systemctl start timetrack-slg.service", shell=True)
 
-        crontab_addition = f'\n\n*/5 * * * * {path_to_script} --input_filepath {time_log_filepath} --config_filepath {config_filepath} --run_interval 5'
+        path_to_consolidate_script = f'/home/{username}/.local/bin/timetrack-consolidate-slg'
+        crontab_addition = f'\n\n*/5 * * * * {path_to_consolidate_script} --input_filepath {time_log_filepath} --config_filepath {config_filepath} --run_interval 5'
         subprocess.run(f'(crontab -u {username} -l; echo \'{crontab_addition}\' ) | crontab -u {username} -', shell=True)
 
     except:
