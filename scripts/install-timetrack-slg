@@ -194,7 +194,8 @@ if __name__ == '__main__':
         crontab_addition = f'\n\n*/5 * * * * {path_to_consolidate_script} --input_filepath {time_log_filepath} --config_filepath {config_filepath} --run_interval 5'
         confirm_output(f'(crontab -u {username} -l; echo \'{crontab_addition}\' ) | crontab -u {username} -', expected_outputs=[lambda output: output == '', lambda output: output.startswith('No crontab')])
 
-        print('\n\nInstallation successful.')
+        print('\n\nInstallation successful.\n')
+        print(f'Find your time log file at {time_log_filepath}\n')
 
     except:
         logger.exception('An error occurred')
