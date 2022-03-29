@@ -97,6 +97,26 @@ def read_config_file(filepath):
 def is_root():
     return os.geteuid() == 0
 
+def confirm_output(command, expected_outputs=[lambda output: output == ''], print_output=False):
+    output = subprocess.check_output(command, shell=True).decode('utf-8').strip()
+    if print_output:
+        print(output)
+    for func in expected_outputs:
+        if func(output) == True:
+            return True
+    print(f'''\nCommand:
+
+{command}
+
+had the unanticipated output of:
+
+{output}
+
+Please review any potential consequences of this.
+''')
+
+
+
 SYSTEMD_SERVICE = lambda username, display_var, path_to_script, time_log_filepath, config_filepath: f'''
 [Unit]
 Description=Time tracker
@@ -144,8 +164,8 @@ if __name__ == '__main__':
         time_log_filepath = config.get('time_log_filepath')
 
         # create log directory / handle ownership
-        subprocess.run(f"sudo mkdir -p /var/log/slg", shell=True)
-        subprocess.run(f"sudo chown {username}:{username} /var/log/slg", shell=True)
+        confirm_output(f"sudo mkdir -p /var/log/slg")
+        confirm_output(f"sudo chown {username}:{username} /var/log/slg")
 
         logger = init_logger(
             name=__name__,
@@ -155,22 +175,26 @@ if __name__ == '__main__':
         logger.info(f'\nUsing configuration:\n\n{pformat(sensitive_stripped_config)}')
 
         # create config directory and file / handle ownership
-        subprocess.run(f"sudo mkdir -p {'/'.join(config_filepath.split('/')[:-1])} && sudo echo \"{DEFAULT_CONFIG}\" > {config_filepath}", shell=True)
-        subprocess.run(f"sudo chown {username}:{username} {'/'.join(config_filepath.split('/')[:-1])}", shell=True)
-        subprocess.run(f"sudo chown {username}:{username} {config_filepath}", shell=True)
+        confirm_output(f"sudo mkdir -p {'/'.join(config_filepath.split('/')[:-1])} && sudo echo \"{DEFAULT_CONFIG}\" > {config_filepath}")
+        confirm_output(f"sudo chown {username}:{username} {'/'.join(config_filepath.split('/')[:-1])}")
+        confirm_output(f"sudo chown {username}:{username} {config_filepath}")
 
         display_var = subprocess.check_output(f"env | grep DISPLAY", shell=True).decode('utf-8').strip()
-        # path_to_script = subprocess.check_output(f"whereis timetrack-slg", shell=True).decode('utf-8').strip()
+        # path_to_script = subprocess.check_output(f"whereis timetrack-slg").decode('utf-8').strip()
         path_to_script = f'/home/{username}/.local/bin/timetrack-slg'
-        subprocess.run(f"sudo echo \"{SYSTEMD_SERVICE(username, display_var, path_to_script, time_log_filepath, config_filepath)}\" > /etc/systemd/system/timetrack-slg.service", shell=True)
+        confirm_output(f"sudo echo \"{SYSTEMD_SERVICE(username, display_var, path_to_script, time_log_filepath, config_filepath)}\" > /etc/systemd/system/timetrack-slg.service")
 
-        subprocess.run(f"sudo systemctl daemon-reload", shell=True)
-        subprocess.run(f"sudo systemctl enable timetrack-slg.service", shell=True)
-        subprocess.run(f"sudo systemctl start timetrack-slg.service", shell=True)
+        # setup the systemctl service
+        confirm_output(f"sudo systemctl daemon-reload")
+        confirm_output(f"sudo systemctl enable timetrack-slg.service", expected_outputs=[lambda output: output == '', lambda output: output.startswith('Created symlink')], print_output=True)
+        confirm_output(f"sudo systemctl start timetrack-slg.service")
 
+        # install new crontab line
         path_to_consolidate_script = f'/home/{username}/.local/bin/timetrack-consolidate-slg'
         crontab_addition = f'\n\n*/5 * * * * {path_to_consolidate_script} --input_filepath {time_log_filepath} --config_filepath {config_filepath} --run_interval 5'
-        subprocess.run(f'(crontab -u {username} -l; echo \'{crontab_addition}\' ) | crontab -u {username} -', shell=True)
+        confirm_output(f'(crontab -u {username} -l; echo \'{crontab_addition}\' ) | crontab -u {username} -', expected_outputs=[lambda output: output == '', lambda output: output.startswith('No crontab')])
+
+        print('\n\nInstallation successful.')
 
     except:
         logger.exception('An error occurred')
