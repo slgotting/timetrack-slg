@@ -115,15 +115,15 @@ WantedBy=multi-user.target
 
 DEFAULT_CONFIG = '''
 # DynamicPageTitles:
-    # "static part of dynamic title": "resolved string"
+    # 'static part of dynamic title': 'resolved string'
 
 # OverrideAll:
-    # "Twitch -": true
+    # 'Twitch -': true
 
 IdleIgnore:
-    "Twitch -": true
-    "- YouTube -": true
-    "Podcast on Spotify": true
+    'Twitch -': true
+    '- YouTube -': true
+    'Podcast on Spotify': true
 '''
 
 if __name__ == '__main__':
@@ -154,10 +154,9 @@ if __name__ == '__main__':
         logger.info(f'\nUsing configuration:\n\n{pformat(sensitive_stripped_config)}')
 
         # create config directory and file / handle ownership
-        subprocess.run(f"sudo -p mkdir {'/'.join(config_filepath.split('/')[:-1])} && sudo echo \"{DEFAULT_CONFIG}\" > {config_filepath}", shell=True)
+        subprocess.run(f"sudo mkdir -p {'/'.join(config_filepath.split('/')[:-1])} && sudo echo \"{DEFAULT_CONFIG}\" > {config_filepath}", shell=True)
         subprocess.run(f"sudo chown {username}:{username} {'/'.join(config_filepath.split('/')[:-1])}", shell=True)
         subprocess.run(f"sudo chown {username}:{username} {config_filepath}", shell=True)
-        print(f"sudo mkdir -p {'/'.join(config_filepath.split('/')[:-1])} && sudo echo \"{DEFAULT_CONFIG}\" > {config_filepath}")
 
         display_var = subprocess.check_output(f"env | grep DISPLAY", shell=True).decode('utf-8').strip()
         # path_to_script = subprocess.check_output(f"whereis timetrack-slg", shell=True).decode('utf-8').strip()
