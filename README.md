@@ -17,14 +17,19 @@ I may add support for Windows in the future but I wanted to get it out as it is 
 
 ## Getting Started
 
+### Install required debian packages
+
+`sudo apt install xdotool wmctrl xprintidle`
+
 ### Install package with
 
 `pip install timetrack-slg`
 
-
 ## Install the easy way
 
-`sudo install-timetrack-slg`
+`sudo -E env "PATH=$PATH" install-timetrack-slg -u username`
+> sudo access is necessary because we're installing a new systemd service
+> The -E env sets your superuser's PATH variable to your current PATH variable, so root has access to the necessary python packages
 
 ## Install the hard way
 
